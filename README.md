@@ -13,7 +13,7 @@ func NewAddressFromPkBytes(pkBytes []byte, prefix string) (string, error)
 func NewAddressFromPKHex(pkHex, prefix string) (string, error)
 ```
 
-3 Generate address from pk
+3. Generate address from pk
 ```
 func NewAddressFromPK(pk bls.PublicKey, prefix string) (string, error)
 ```
