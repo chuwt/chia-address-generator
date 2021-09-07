@@ -3,19 +3,29 @@
 > So it's not a good enough way to use it in prod, use it just for personal
 
 ## Methods
-- generate address from pkBytes
+1. Generate address from pkBytes
 ```
 func NewAddressFromPkBytes(pkBytes []byte, prefix string) (string, error)
 ```
 
-- generate address from pkHex
+2. Generate address from pkHex
 ```
 func NewAddressFromPKHex(pkHex, prefix string) (string, error)
 ```
 
-- generate address from pk
+3 Generate address from pk
 ```
 func NewAddressFromPK(pk bls.PublicKey, prefix string) (string, error)
+```
+
+4. Get address from puzzleHash
+```
+GetAddressFromPuzzleHash(ph []byte, prefix string) (string, error)
+``` 
+
+5. Get puzzleHash from address
+```
+func GetPuzzleHashFromAddress(address string) (string, []byte, error)
 ```
 
 
