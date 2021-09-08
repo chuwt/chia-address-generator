@@ -4,7 +4,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	bls "github.com/chuwt/chia-bls-go"
-	"go.uber.org/atomic"
 	"strings"
 )
 
@@ -77,12 +76,13 @@ func genAddress(pkBytes []byte) []byte {
 		hashBuf = make([]byte, 32)     // 32
 		tmpBuf  = make([]byte, 1+2*32) // 1 + 32 + 32
 
-		text    = ""
-		firstFF = atomic.NewInt32(0)
+		text = ""
+		firstFF = 0
 	)
 
 	for i := len(programString) - 2; i >= 0; i -= 2 {
-		if firstFF.CAS(1, 2) {
+		if firstFF == 1 {
+			firstFF += 1
 			text = programString[i : i+96+2] // 2(len) + 96(hash)
 		} else {
 			text = programString[i : i+2]
@@ -98,7 +98,8 @@ func genAddress(pkBytes []byte) []byte {
 			hashBuf = hash.Sum(nil)
 			hash.Reset()
 			hashStack.Append(hashBuf)
-			if firstFF.CAS(0, 1) {
+			if firstFF == 0 {
+				firstFF += 1
 				i -= 96
 			}
 		default:
