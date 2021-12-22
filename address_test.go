@@ -33,11 +33,10 @@ func TestGenerateAddress(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Log(addr1 == addr2 && addr2 == addr3, addr1)
+	t.Log(testAddress == addr1 && addr1 == addr2 && addr2 == addr3, addr1)
 }
 
 func TestPH2Addr(t *testing.T) {
-
 	prefix, puzzleHash, err := GetPuzzleHashFromAddress(testAddress)
 	if err != nil {
 		t.Fatal(err)

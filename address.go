@@ -56,9 +56,7 @@ func NewAddressFromPK(pk bls.PublicKey, prefix string) (string, error) {
 }
 
 func NewAddressFromPKHex(pkHex, prefix string) (string, error) {
-	if strings.HasPrefix(pkHex, "0x") {
-		pkHex = pkHex[2:]
-	}
+	pkHex = strings.TrimPrefix(pkHex, "0x")
 	pkBytes, err := hex.DecodeString(pkHex)
 	if err != nil {
 		return "", err

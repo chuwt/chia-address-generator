@@ -28,11 +28,11 @@ func opSha256(pkBytes, hiddenHash []byte) []byte {
 	h := sha256.New()
 	h.Write(pkBytes)
 	h.Write(hiddenHash)
-	return h.Sum(nil)[:]
+	return h.Sum(nil)
 }
 
 func opPubKeyForExp(arg []byte) bls.PublicKey {
-	i0 := _argsAsIntList(arg)
+	i0 := bigIntFromBytes(arg)
 	i0.Mod(i0, bigArg)
 	return bls.KeyFromBytes(i0.Bytes()).GetPublicKey()
 }
@@ -41,6 +41,19 @@ func opPointAdd(pk, exPk bls.PublicKey) []byte {
 	return pk.Add(exPk).Bytes()
 }
 
-func _argsAsIntList(arg []byte) *big.Int {
-	return new(big.Int).SetBytes(arg)
+func bigIntFromBytes(buf []byte) *big.Int {
+	var x = new(big.Int)
+	if len(buf) == 0 {
+		return x.SetBytes(buf)
+	}
+
+	if (0x80 & buf[0]) == 0 { // positive number
+		return x.SetBytes(buf)
+	}
+
+	for i := range buf {
+		buf[i] = ^buf[i]
+	}
+
+	return x.SetBytes(buf).Add(x, big.NewInt(1)).Neg(x)
 }
